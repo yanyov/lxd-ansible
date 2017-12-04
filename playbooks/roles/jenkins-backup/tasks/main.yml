@@ -1,0 +1,18 @@
+- name: Get date
+  shell: "date +%Y-%m-%d-%H-%M" 
+  register: backup_date
+  changed_when: false
+
+- name: Backup jenkins home directory - exclude workspace
+  archive:
+    path: "{{ jenkins_home }}"
+    exclude_path: "{{ jenkins_home }}/workspace"
+    dest: "{{ jenkins_archive_dest }}/{{ backup_date.stdout }}-{{ jenkins_archive_name }}"
+    format: gz
+
+- name: Upload backup to S3
+  aws_s3:
+    bucket: "{{ jenkins_backup_s3_bucket}}"
+    src: "{{ jenkins_archive_dest }}/{{ backup_date.stdout }}-{{ jenkins_archive_name }}"
+    mode: put
+  when: jenkins_backup_s3_bucket is defined

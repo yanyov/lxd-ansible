@@ -1,0 +1,6 @@
+jenkins_home: /var/lib/jenkins
+jenkins_archive_name: "jenkins-backup.tgz"
+jenkins_archive_dest: "/tmp"
+
+#Name of the s3 bucket where to upload jenkins backup
+#jenkins_backup_s3_bucket:
