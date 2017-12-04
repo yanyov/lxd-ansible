@@ -1,0 +1,7 @@
+#system
+{% raw %}
+#Count tcp connections by port number
+UserParameter=system.conn_tcp_by_port[*],netstat -nt | grep ":$1" | wc -l
+#Return process details returned by PID and ps values like pcpu, rss and etc
+UserParameter=system.proc_details[*],root=$($1);res=;i=$root; while  pgrep -P $i 1>/dev/null; do i=$(pgrep -P $i); i=$(echo $i | sed 's/ /,/g'); res="$res,$i" ;done;ps --no-headers -o $2 $(echo "$root$res" | sed 's/,/ /g') | paste -sd+ - | bc | awk '{printf "%.2f", $$0}'
+{% endraw %}  

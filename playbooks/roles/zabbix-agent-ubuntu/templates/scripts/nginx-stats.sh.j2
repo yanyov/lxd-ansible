@@ -1,0 +1,49 @@
+#!/bin/bash
+#Nginx zabbix monitoring idea from here: http://pr0fikoss.weebly.com/blog/1
+##### OPTIONS VERIFICATION #####
+set -e # exit on error
+
+if [[ -z "$1" || -z "$2" || -z "$3" ]]; then
+  exit 1
+fi
+##### PARAMETERS #####
+RESERVED="$1"
+METRIC="$2"
+STATSURL="$3"
+CURL="/usr/bin/curl"
+CACHE_FILE="/tmp/zabbix.nginx.`echo $STATSURL | md5sum | cut -d" " -f1`.cache"
+##### RUN #####
+
+DATACACHE=`${CURL} --insecure -s "${STATSURL}" 2>&1`
+echo "${DATACACHE}" > "${CACHE_FILE}" # !!!
+chmod 640 "${CACHE_FILE}"
+#
+if [ "${METRIC}" = "active" ]; then
+  cat "${CACHE_FILE}" | grep "Active connections" | cut -d':' -f2 | awk '{$1=$1;print}'
+fi
+if [ "${METRIC}" = "accepts" ]; then
+  cat "${CACHE_FILE}" | sed -n '3p' | cut -d" " -f2 | awk '{$1=$1;print}'
+fi
+if [ "${METRIC}" = "handled" ]; then
+  cat "${CACHE_FILE}" | sed -n '3p' | cut -d" " -f3 | awk '{$1=$1;print}'
+fi
+if [ "${METRIC}" = "requests" ]; then
+  cat "${CACHE_FILE}" | sed -n '3p' | cut -d" " -f4 | awk '{$1=$1;print}'
+fi
+if [ "${METRIC}" = "reading" ]; then
+  cat "${CACHE_FILE}" | grep "Reading" | cut -d':' -f2 | cut -d' ' -f2 | awk '{$1=$1;print}'
+fi
+if [ "${METRIC}" = "writing" ]; then
+  cat "${CACHE_FILE}" | grep "Writing" | cut -d':' -f3 | cut -d' ' -f2 | awk '{$1=$1;print}'
+fi
+if [ "${METRIC}" = "waiting" ]; then
+  cat "${CACHE_FILE}" | grep "Waiting" | cut -d':' -f4 | cut -d' ' -f2 | awk '{$1=$1;print}'
+fi
+if [ "${METRIC}" = "reqconn" ]; then
+  REQUESTS=$(cat "${CACHE_FILE}" | sed -n '3p' | cut -d" " -f4 | awk '{$1=$1;print}')
+  HANDLED=$(cat "${CACHE_FILE}" | sed -n '3p' | cut -d" " -f3 | awk '{$1=$1;print}')
+  echo "scale=2; $REQUESTS/$HANDLED" | bc -l
+fi
+
+#
+exit 0

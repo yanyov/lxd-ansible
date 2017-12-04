@@ -1,0 +1,22 @@
+- name: Install nginx - reverse proxy for jenkins
+  apt: 
+    name: nginx
+
+- name: Nginx reverse proxy configuration
+  copy:
+    src: jenkins.conf
+    dest: /etc/nginx/sites-available/default
+  notify: Restart nginx
+
+- name: Add Jenkins's repo apt key
+  apt_key:
+    url: "{{ jenkins_repo_key }}"
+
+- name: Add Jenkins's repo 
+  apt_repository: 
+    repo: "{{ jenkins_repo }}"
+
+- name: Update apt with new Jenkins repo and install Jenkins
+  apt:
+    name: jenkins
+    update_cache: yes

@@ -1,0 +1,68 @@
+- name: Install common apt packages
+  apt:
+    name: "{{ item }}"
+  with_items: "{{ es_common_packages }}"
+
+- name: Install Elasticsearch apt packages from Telerik repo
+  apt:
+    name: elasticsearch={{ es_deb_version }}
+    update_cache: yes
+    state: present
+  notify: Restart elasticsearch
+
+- name: Create list with elasticsearch nodes
+  set_fact:
+    elasticsearch_cluster: >
+      "{{ groups[tap_identity_group] | map('regex_replace', '.' + tap_environment, '') |
+      join(', ') }}"
+
+- name: ES config files
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart elasticsearch
+  with_items: "{{ es_configs }}"
+
+- name: ES cron logs cleanup file
+  template:
+    src: elasticsearch-cron.j2
+    dest: /etc/cron.daily/elasticsearch
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Ensure ElasticSearch is running now and after reboot
+  service:
+    name: elasticsearch
+    enabled: yes
+    state: started
+
+- name: Wait for service to start
+  wait_for:
+    host: "{{ ansible_hostname }}"
+    port: "{{ es_http_port }}"
+
+- name: Elasticsearch templates
+  uri:
+    method: PUT
+    url: http://localhost:{{ es_http_port }}/_template/{{ item.name }}?pretty
+    body: "{{ item.content }}"
+    body_format: json
+    return_content: yes
+  run_once: true
+  with_items: "{{ es_template }}"
+
+- name: Elasticsearch cluster update settings
+  uri:
+    method: PUT
+    url: http://localhost:{{ es_http_port }}/_cluster/settings
+    body: "{{ lookup('template', '../templates/elasticsearch-cluster-settings.j2') }}"
+    body_format: json
+    return_content: yes
+  run_once: true
+
+- include: curator.yml
+  when: inventory_hostname == "inf-elasticsearch-1.{{ tap_environment }}"

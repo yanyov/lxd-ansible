@@ -1,0 +1,6 @@
+UserParameter=bind[*],{{ zabbix_agent_include_dir }}scripts/bind.sh $1
+UserParameter=bind.zones[*],{{ zabbix_agent_include_dir }}scripts/bind.sh zones $1
+UserParameter=bind.zones.discovery,{{ zabbix_agent_include_dir }}scripts/bind.sh zones discovery
+UserParameter=bind.zones.validate[*],{{ zabbix_agent_include_dir }}scripts/bind.sh zones validate $2
+UserParameter=bind.zones.errors[*],{{ zabbix_agent_include_dir }}scripts/bind.sh zones errors $1
+UserParameter=bind.zones.warnings[*],{{ zabbix_agent_include_dir }}scripts/bind.sh zones warnings $1

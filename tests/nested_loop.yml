@@ -1,0 +1,16 @@
+- hosts: localhost
+  gather_facts: false
+  vars:
+    alpha:
+      - { property: "security.privileged", value: "true" }
+      - { property: "security.nesting", value: "true" }
+      - { property: "linux.kernel_modules", value: "ip_tables, ip6_tables, netlink_diag, nf_nat, overlay" }      
+#    numbers:  [ 1, 2, 3, 4 ] 
+
+    numbers: 1
+  tasks:
+    - debug:
+        msg: "{{ item.0 }} {{ item.1.property }}: {{ item.1.value }}"
+      with_nested:
+        - "{{ numbers }}"
+        - "{{ alpha }}"

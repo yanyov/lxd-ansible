@@ -1,0 +1,10 @@
+/var/log/logstash/*.log {
+        maxsize 100M
+        daily
+        rotate 7
+        copytruncate
+        compress
+        delaycompress
+        missingok
+        notifempty
+}

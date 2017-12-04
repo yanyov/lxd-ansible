@@ -1,0 +1,19 @@
+- name: Install Kibana from Telerik repository
+  apt:
+    name: kibana={{ kibana_version }}
+    state: installed
+    update_cache: yes
+    cache_valid_time: 3600
+  notify: Restart kibana
+
+- name: Configure Kibana
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items: "{{ kibana_config }}"
+
+- name: Start Kibana and enable it to run after reboot
+  service:
+    name: kibana
+    state: started
+    enabled: yes

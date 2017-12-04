@@ -1,0 +1,61 @@
+- name: Install Elasticsearch curator from PIP
+  pip:
+    name: elasticsearch-curator
+    version: "{{ es_curator_version }}"
+    state: present
+  register: pip_package_install
+  until: pip_package_install|success
+  retries: 24
+  delay: 5
+
+- name: Create "{{ es_curator_dir }}"
+  file:
+    path: "{{ es_curator_dir }}"
+    owner: root
+    group: root
+    state: directory
+    mode: 0755
+
+- name: Copy curator.yml
+  template:
+    src: curator.yml.j2
+    dest: "{{ es_curator_dir }}/curator.yml"
+
+- name: Copy curator action file
+  template:
+    src: curator-action-file.yml.j2
+    dest: "{{ es_curator_dir }}/curator-action-file.yml"
+
+- name: Create cron job for curator
+  cron:
+    name: "Run curator"
+    minute: 30
+    hour: 23
+    job: >
+      curator --config {{ es_curator_dir }}/curator.yml
+      {{ es_curator_dir }}/curator-action-file.yml
+
+- name: Check if cerebro plugin is present
+  stat:
+    path: "{{ es_cerebro_dir }}/bin/cerebro"
+  register: cerebro
+
+- name: Unarchive cerebro plugin
+  unarchive:
+    src: "{{ es_cerebro_url }}"
+    dest: "{{ es_cerebro_location }}"
+    remote_src: yes
+  when: not cerebro.stat.exists | bool
+
+- name: Copy cerebro upstart template
+  template:
+    src: cerebro.conf.j2
+    dest: /etc/init/cerebro-plugin.conf
+  notify: Start cerebro plugin
+
+- name: Start cerebro
+  service:
+    name: cerebro-plugin
+    state: started
+    enabled: yes
+

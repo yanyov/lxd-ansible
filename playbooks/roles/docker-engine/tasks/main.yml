@@ -1,0 +1,18 @@
+- name: Install docker-ce prerequisite
+  apt:
+    name: "{{ item }}"
+  with_items: "{{ docker_ce_prereq }}"
+
+- name: Add Docker's official GPG key for apt repository
+  apt_key:
+    url: "{{ docker_repo_gpg_key }}"
+
+- name: Add apt repository
+  apt_repository:
+    repo: "{{ docker_repo }}"
+    update_cache: yes
+    validate_certs: no
+
+- name: Install docker-ce
+  apt:
+    name: "{{ docker_pkg_name }}"

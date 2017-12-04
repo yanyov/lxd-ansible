@@ -1,0 +1,22 @@
+- name: Install etcd
+  apt:
+    name: etcd
+    update_cache: yes
+    state: present
+  notify: Run etcd
+
+- name: Copy etcd template
+  copy:
+    src: etcd
+    dest: "{{ etcd_dir }}/etcd"
+  notify: Run etcd
+
+- name: Copy etcd configuration
+  template:
+    src: flanneld-config.json.j2
+    dest: "{{ etcd_dir }}/flannel-config-udp.json"
+
+- name: Set etcd key:value
+  shell: "etcdctl set {{ etcd_root }} < {{ etcd_dir }}/flannel-config-udp.json"
+  register: etcd_out
+  failed_when: etcd_out.rc != 0

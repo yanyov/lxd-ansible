@@ -1,0 +1,112 @@
+- name: Create folder named scripts/redis in "{{ zabbix_agent_include_dir }}"
+  file:
+    path: "{{ zabbix_agent_include_dir }}/scripts/redis/"
+    recurse: yes
+    state: directory
+    mode: 0755
+  when: tap_role == "rediscache" or tap_role == "redisrouter"
+
+- name: Create redis.conf file only if tap_role is rediscache or redisrouter
+  template:
+    src: redis.conf.j2
+    dest: "{{ zabbix_agent_include_dir }}redis.conf"
+  when: tap_role == "rediscache" or tap_role == "redisrouter"
+  notify:
+    - Restart zabbix-agent
+    - Restart zabbix-agent-docker
+
+- name: Create scripts/redis/redis-status.sh
+  template:
+    src: scripts/redis/redis-status.sh.j2
+    dest: "{{ zabbix_agent_include_dir }}scripts/redis/redis-status.sh"
+    mode: 0777
+  when: tap_role == "rediscache" or tap_role == "redisrouter"
+  notify:
+    - Restart zabbix-agent
+    - Restart zabbix-agent-docker
+
+- name: Create scripts/redis/redis-status8379.sh
+  template:
+    src: scripts/redis/redis-status8379.sh.j2
+    dest: "{{ zabbix_agent_include_dir }}scripts/redis/redis-status8379.sh"
+    mode: 0777
+  when: tap_role == "rediscache" or tap_role == "redisrouter"
+  notify:
+    - Restart zabbix-agent
+    - Restart zabbix-agent-docker
+
+- name: Add Zabbix BIND userparameter configuration
+  template:
+    src: zabbix-bind.conf.j2
+    dest: "{{ zabbix_agent_include_dir }}/bind.conf"
+  when: tap_role == "bind"
+  notify:
+    - Restart zabbix-agent
+    - Restart zabbix-agent-docker
+
+- name: Add Zabbix BIND shell script
+  template:
+    src: scripts/zabbix-bind.sh.j2
+    dest: "{{ zabbix_agent_include_dir }}scripts/bind.sh"
+    mode: 0777
+  when: tap_role == "bind"
+  notify:
+    - Restart zabbix-agent
+    - Restart zabbix-agent-docker
+
+- name: Add Zabbix RabbitMQ Node script
+  template:
+    src: scripts/rabbitmq_node.py.j2
+    dest: "{{ zabbix_agent_include_dir }}scripts/rabbitmq_node.py"
+    mode: 0777
+  when: tap_role == "rabbitmq" or tap_role == "logstash"
+  notify:
+    - Restart zabbix-agent
+    - Restart zabbix-agent-docker
+
+- name: Add Zabbix RabbitMQ Node userparameter configuration
+  template:
+    src: rabbitmq_node.conf.j2
+    dest: "{{ zabbix_agent_include_dir }}/rabbitmq_node.conf"
+  when: tap_role == "rabbitmq" or tap_role == "logstash"
+  notify:
+    - Restart zabbix-agent
+    - Restart zabbix-agent-docker
+
+- name: Create nginx.conf in {{ zabbix_agent_include_dir }}
+  template:
+    src: nginx.conf.j2
+    dest: "{{ zabbix_agent_include_dir }}/nginx.conf"
+  when: tap_role == "nginxlb"
+  notify:
+    - Restart zabbix-agent
+    - Restart zabbix-agent-docker
+
+- name: Create nginx-stats.sh in {{ zabbix_agent_include_dir }}/scripts
+  template:
+    src: scripts/nginx-stats.sh.j2
+    dest: "{{ zabbix_agent_include_dir }}/scripts/nginx-stats.sh"
+    mode: 0777
+  when: tap_role == "nginxlb"
+  notify:
+    - Restart zabbix-agent
+    - Restart zabbix-agent-docker
+
+- name: Create zabbix_es_monitor.conf in {{ zabbix_agent_include_dir }}
+  template:
+    src: zabbix_es_monitor.conf.j2
+    dest: "{{ zabbix_agent_include_dir }}/zabbix_es_monitor.conf"
+  when: "'an-elastic' in inventory_hostname"
+  notify:
+    - Restart zabbix-agent
+    - Restart zabbix-agent-docker
+
+- name: Create zabbix_es_monitor.py in {{ zabbix_agent_include_dir }}/scripts
+  template:
+    src: scripts/zabbix_es_monitor.py.j2
+    dest: "{{ zabbix_agent_include_dir }}/scripts/zabbix_es_monitor.py"
+    mode: 0777
+  when: "'an-elastic' in inventory_hostname"
+  notify:
+    - Restart zabbix-agent
+    - Restart zabbix-agent-docker

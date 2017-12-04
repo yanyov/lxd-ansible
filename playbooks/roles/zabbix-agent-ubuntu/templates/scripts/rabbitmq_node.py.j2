@@ -1,0 +1,64 @@
+#!/usr/bin/env python
+import requests
+import json
+import sys
+
+class RabbitMQNode:
+
+    def __init__(self, host, port, user, password, vhost):
+        self.host = host
+        self.user = user
+        self.port = port
+        self.password = password
+        self.vhost = vhost
+
+
+    def _get_stats(self, endpoint):
+        url = 'http://{}:{}/api{}'.format(self.host, self.port, endpoint)
+        resp = requests.get(url, auth=(self.user, self.password))
+        resp.raise_for_status()
+        return resp
+
+    def get_cluster_size(self):
+        nodes_resource = '/nodes'
+        resp = self._get_stats(nodes_resource)
+        return len(resp.json())
+
+    def get_connections(self):
+        conn_resource = '/connections'
+        resp = self._get_stats(conn_resource)
+        return len(resp.json())
+
+    def health_check(self):
+        health_check = '/aliveness-test/'
+        resp = self._get_stats(health_check + self.vhost)
+        data = resp.json()
+        return data["status"] == "ok"
+
+def main():
+    if len(sys.argv) != 7:
+        print "Illegal argument count."
+        sys.exit(1)
+
+    method = sys.argv[1]
+    host = sys.argv[2]
+    port = sys.argv[3]
+    user = sys.argv[4]
+    password = sys.argv[5]
+    vhost = sys.argv[6]
+
+    rabbit = RabbitMQNode(host, port, user, password, vhost)
+
+    if method == 'health_check':
+        if rabbit.health_check():
+            print '1'
+	else:
+            print '0'
+
+    if method == 'get_connections':
+        print rabbit.get_connections()
+
+    if method == 'get_cluster_size':
+        print rabbit.get_cluster_size()
+
+main()

@@ -1,0 +1,19 @@
+input {
+    beats {
+        port => "{{ logstash_ossec_port }}"
+        codec => "json_lines"
+    }
+}
+filter {}
+output {
+    if "inf-ossec" in [manager][name] {
+      elasticsearch {
+        hosts => {{ logstash_elasticsearch_output | to_json }}
+        index => "wazuh-alerts-%{+YYYY.MM.dd}"
+        document_type => "wazuh"
+        template => "/etc/logstash/wazuh-elastic5-template.json"
+        template_name => "wazuh"
+        template_overwrite => true
+    }
+  }
+}

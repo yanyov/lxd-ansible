@@ -1,0 +1,9 @@
+lxd_container_names: lxd_container
+lxd_alias: xenial #lxc image alias list ubuntu:
+lxd_image_server: https://cloud-images.ubuntu.com/releases #lxc remomte list
+#lxd_image_server: https://images.linuxcontainers.org    
+lxd_profile:
+  - default
+lxd_container_conf: 
+  - security.privileged: "false"
+  - security.nesting: "false"

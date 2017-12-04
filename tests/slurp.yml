@@ -1,0 +1,30 @@
+#This test is run on 
+# /run/flannel/subnet.env with content
+#
+#FLANNEL_NETWORK=192.168.0.0/16
+#FLANNEL_SUBNET=192.168.91.1/24
+#FLANNEL_MTU=1472
+#FLANNEL_IPMASQ=false
+
+
+#will print
+
+#ok: [kub-master] => {
+#    "changed": false,
+#    "msg": "192.168.91.1/24"
+#}
+
+- hosts: kub-master
+  tasks:
+  - name: Slurp test
+    slurp:
+#      src: /proc/mounts
+      src: /run/flannel/subnet.env
+    register: mounts
+
+  - name: set facts
+    set_fact:
+      mp: "{{ mounts['content'] | b64decode }}"
+
+  - debug:
+      msg: "{{ mp.split('\n')[1].split('=')[1] }}"

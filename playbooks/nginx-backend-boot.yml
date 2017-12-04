@@ -1,0 +1,12 @@
+- name: Create nginx backend  
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tags: [boot, nginx]
+  roles:
+  - role: lxd_container
+    lxd_container_names: 
+    - backend1
+    - backend2
+    lxd_profile:
+    - default

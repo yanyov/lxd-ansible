@@ -1,0 +1,34 @@
+- name: Create a container ubuntu16
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tags: [boot, clean]
+  roles:
+  - role: lxd_container
+    lxd_container_names: 
+    - u16
+    lxd_profile:
+    - default
+    - docker
+    lxd_container_conf:
+    - security.privileged: "true"
+    - security.nesting: "true"
+    - linux.kernel_modules: "ip_tables, ip6_tables, netlink_diag, nf_nat, overlay"
+
+- name: Create a container ubuntu1
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tags: [boot, clean]
+  roles:
+  - role: lxd_container
+    lxd_alias: trusty
+    lxd_container_names: 
+    - u14
+    lxd_profile:
+    - default
+    - docker
+    lxd_container_conf:
+    - security.privileged: "true"
+    - security.nesting: "true"
+    - linux.kernel_modules: "ip_tables, ip6_tables, netlink_diag, nf_nat, overlay"

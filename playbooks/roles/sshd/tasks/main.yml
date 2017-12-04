@@ -1,0 +1,11 @@
+- name: Ensure openssh-server is installed
+  apt:
+    name: openssh-server
+    state: present
+  notify: Run sshd
+
+- name: Copy sshd_config
+  copy:
+    src: sshd_config
+    dest: /etc/ssh/sshd_config
+  notify: Run sshd

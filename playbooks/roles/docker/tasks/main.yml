@@ -1,0 +1,14 @@
+- name: Install docker.io
+  apt:
+    name: docker.io
+    state: present
+  notify: Run docker
+
+- name: Copy daemon.json
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+  notify: Run docker
+
+- include: docker_flanneld.yml
+  when: docker_overlay_net | default ('false') | bool

@@ -1,0 +1,39 @@
+es_node_master: 1
+es_indices_memory_index_buffer_size: 30%
+es_clustername: PlatformLogstash
+es_log_files_retention_days: 31
+es_http_port: 9200
+es_deb_version: 5.3.0
+es_curator_version: 4.2.6
+es_configs:
+  - { src: elasticsearch.yml.j2, dest: /etc/elasticsearch/elasticsearch.yml }
+  - { src: log4j2.properties.j2, dest: /etc/elasticsearch/log4j2.properties }
+  - { src: elasticsearch.default.j2, dest: /etc/default/elasticsearch }
+  - { src: jvm.options.j2, dest: /etc/elasticsearch/jvm.options }
+es_user: elasticsearch
+es_group: elasticsearch
+es_index_template: "*"
+es_number_of_replicas: "1"
+es_number_of_shards: "5"
+es_refresh_interval: "30s"
+es_flush_threshhold_size: "512mb"
+es_master_nodes: 2
+es_heap_space: 1536m
+es_heap_space_max: 1536m
+es_common_packages:
+    - python-apt
+    - python-pycurl
+    - python-pip
+    - git-core
+    - jq
+    - python3-httplib2
+    - python-httplib2
+    - daemon
+es_template: []
+es_indices_age_close: 7
+es_indices_age_delete: 10
+es_indices_regex: '.+-.+'
+es_curator_dir: /etc/curator
+es_cerebro_url: https://s3.amazonaws.com/tap-devops-public/cerebro-0.6.4.tgz
+es_cerebro_location: /usr/local
+es_cerebro_dir: "{{ es_cerebro_location }}/cerebro-0.6.4"

@@ -1,0 +1,17 @@
+- name: Create kubernetes master lxd container
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tags: [boot, kubernetes]
+  roles:
+  - role: lxd_container
+    lxd_container_names: 
+    - kub1 
+    - kub2
+    lxd_profile:
+    - default
+    - docker
+    lxd_container_conf:
+    - security.privileged: "true"
+    - security.nesting: "true"
+    - linux.kernel_modules: "ip_tables, ip6_tables, netlink_diag, nf_nat, overlay"

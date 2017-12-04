@@ -1,0 +1,3 @@
+- include: playbooks/clean-container-boot.yml
+- include: playbooks/clean-container.yml
+

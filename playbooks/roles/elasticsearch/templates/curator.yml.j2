@@ -1,0 +1,9 @@
+client:
+  hosts: "127.0.0.1"
+  port: {{ es_http_port }}
+  timeout: 30
+
+logging:
+  loglevel: INFO
+  logformat: default
+  blacklist: ['elasticsearch', 'urllib3']

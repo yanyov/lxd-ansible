@@ -1,0 +1,3 @@
+nginx_sysctl:
+  - { key: net.core.somaxconn, value: 4096 }
+

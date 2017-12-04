@@ -1,0 +1,11 @@
+- name: Create nginx load balancer  
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tags: [boot, nginx]
+  roles:
+  - role: lxd_container
+    lxd_container_names: 
+    - nginxlb
+    lxd_profile:
+    - default

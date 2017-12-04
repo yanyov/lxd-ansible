@@ -1,0 +1,26 @@
+logstash_configs:
+    - { src: logstash.yml.j2 , dest: /etc/logstash/logstash.yml }
+    - { src: jvm.options.j2 , dest: /etc/logstash/jvm.options }
+    - { src: log4j2.properties.j2 , dest: /etc/logstash/log4j2.properties }
+    - { src: startup.options.j2 , dest: /etc/logstash/startup.options }
+    - { src: pipeline.conf.j2 , dest: /etc/logstash/conf.d/pipeline.conf }
+    - { src: logstash.default.j2 , dest: /etc/default/logstash }
+    - { src: logstash.logrotate.j2 , dest: /etc/logrotate.d/logstash }
+    - { src: wazuh.conf.j2 , dest: /etc/logstash/conf.d/wazuh.conf }
+    - { src: wazuh-elastic5-template.json , dest: /etc/logstash/wazuh-elastic5-template.json }
+    - { src: cloudtrail-logstash.conf.j2, dest: /etc/logstash/conf.d/cloudtrail-logstash.conf }
+
+logstash_pid_file: /var/run/logstash.pid
+logstash_deb_version: '1:5.3.0-1'
+logstash_beats_port: 5044
+logstash_elasticsearch_output: "localhost:9200"
+logstash_heap_space: 1024m
+logstash_heap_space_max: 2048m
+logstash_user: logstash
+logstash_group: logstash
+logstash_service: logstash
+logstash_ossec_port: 5000
+logstash_cloudtrail_prefix: "cloudtrail/AWSLogs/{{ tap_account_id }}/CloudTrail/"
+logstash_cloudtrail_interval: 300
+logstash_cloudtrail_bucket: "cloudtrail-{{ tap_environment }}"
+logstash_cloudtrail_sincedb: /usr/share/logstash/data/cloudtrail_s3_sincedb

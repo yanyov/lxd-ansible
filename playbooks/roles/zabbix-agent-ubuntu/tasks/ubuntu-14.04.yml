@@ -1,0 +1,4 @@
+- name: Install zabbix-agent package
+  tags: zabbix-agent
+  apt:
+    name: zabbix-agent={{ zabbbix_agent_package_version }}

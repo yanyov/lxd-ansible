@@ -1,0 +1,29 @@
+#zabbix_agent_docker_image: "042292518259.dkr.ecr.eu-west-1.amazonaws.com\
+#/common/zabbix-agent-docker"
+zabbix_agent_docker_image: bhuisgen/docker-zabbix-coreos
+zabbix_agent_etc: /etc/zabbix
+zabbix_agent_include_dir: "{{ zabbix_agent_etc }}/zabbix_agentd.conf.d/"
+zabbix_agent_upgrades_dir: "{{ zabbix_agent_include_dir }}scripts/upgrades"
+zabbix_agent_log_dir: /var/log/zabbix-agent
+zabbix_agent_log_file: "{{ zabbix_agent_log_dir }}/zabbix_agentd.log"
+zabbix_agent_log_file_size: 1
+zabbix_agent_server: inf-zabbix-1
+zabbix_agent_server_active: inf-zabbix-1
+zabbix_agent_hostname: "{{ ansible_hostname }}"
+zabbix_agent_timeout: 29
+zabbix_agent_unsafe_user_parameters: 1
+zabbix_agent_enable_remote_commands: 1
+
+# Use this list to copy any custom configurations to the include folder. By default is empty
+zabbix_agent_custom_configs: []
+
+# Should NOT be the same as the include dir or the agent might not start.
+# No need for default value if not used.
+# zabbix_agent_scripts_dir: /etc/zabbix/zabbix_agentd.conf.d/scripts/
+
+# Use this list to copy any scripts to zabbix_agent_scripts_dir (usually under the include folder).
+# By default is empty
+zabbix_agent_custom_scripts: []
+zabbbix_agent_package_version: 1:2.2.2*
+
+tap_role: ''

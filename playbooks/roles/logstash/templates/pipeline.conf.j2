@@ -1,0 +1,11 @@
+input {
+  beats{
+    port => "{{ logstash_beats_port }}"
+  }
+}
+
+output {
+  elasticsearch{
+    hosts => {{ logstash_elasticsearch_output | to_json }}
+  }
+}

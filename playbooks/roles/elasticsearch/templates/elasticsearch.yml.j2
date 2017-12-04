@@ -1,0 +1,33 @@
+######################### ElasticSearch Configuration  ########################
+
+# This file is managed by Ansible, do not be surpised when your changes are overwritten!
+#
+# Please see the source file for context and more information:
+# https://github.com/elasticsearch/elasticsearch/blob/master/config/elasticsearch.yml
+#
+
+
+############################## Network And HTTP ###############################
+
+{% if es_http_port is defined %}
+http.port: {{ es_http_port }}
+http.compression: true
+{% endif %}
+http.cors.allow-origin: "*"
+http.cors.enabled: true
+
+############################## Cluster #######################################
+cluster.name: {{ es_clustername }}
+
+{% if elasticsearch_cluster is defined %}
+discovery.zen.ping.unicast.hosts: {{ elasticsearch_cluster }}
+{% endif %}
+
+############################## Index #######################################
+indices.memory.index_buffer_size: {{ es_indices_memory_index_buffer_size }}
+
+
+############################## Node #######################################
+network.host: _site_, _local_
+node.name: {{ ansible_hostname }}
+node.master: {{ es_node_master }}

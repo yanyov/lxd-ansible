@@ -1,0 +1,32 @@
+actions:
+  1:
+    action: close
+    description: "Close selected indices"
+    options:
+      ignore_empty_list: True
+      delete_aliases: True
+    filters:
+      - filtertype: pattern
+        kind: regex
+        value: "{{ es_indices_regex }}"
+      - filtertype: age
+        source: creation_date
+        direction: older
+        timestring: '%Y.%m.%d'
+        unit: days
+        unit_count: {{ es_indices_age_close }}
+
+  2:
+    action: delete_indices
+    description: "Delete 10 days older indices via creation_date"
+    options:
+      ignore_empty_list: True
+    filters:
+    - filtertype: pattern
+      kind: regex
+      value: "{{ es_indices_regex }}"
+    - filtertype: age
+      source: creation_date
+      direction: older
+      unit: days
+      unit_count: {{ es_indices_age_delete }}

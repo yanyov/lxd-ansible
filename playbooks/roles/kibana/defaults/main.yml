@@ -1,0 +1,6 @@
+kibana_elasticsearch_url: "http://localhost:9200"
+kibana_version: 5.3.0
+kibana_port: 5601
+kibana_config:
+  - { src: 'kibana.yml.j2', dest: '/etc/kibana/kibana.yml'}
+kibana_basePath: "/kibana5"

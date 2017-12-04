@@ -1,0 +1,41 @@
+- name: Create LXD container
+  connection: local
+  lxd_container:
+    name: "{{ item[0] }}"
+    state: started
+    config:
+      "{{ item[1] }}"
+    source:
+      type: image
+      mode: pull
+      protocol: simplestreams
+      server: "{{ lxd_image_server }}"
+      alias: "{{ lxd_alias }}"
+    profiles: "{{ lxd_profile }}" 
+    wait_for_ipv4_addresses: true
+    timeout: 600
+  with_nested: 
+    - "{{ lxd_container_names }}"
+    - "{{ lxd_container_conf }}"
+  register: lxd_container
+#  changed_when: '"started" not in lxd_container.old_state'
+
+#- debug:
+#    var: lxd_container
+
+- name: Reload dynamic inventory
+  meta: refresh_inventory
+
+- name: Check if Python2 is installed in container
+  delegate_to: "{{ item }}"
+  raw: dpkg -s python
+  register: python_check_is_installed
+  failed_when: python_check_is_installed.rc not in [0,1]
+  changed_when: false
+  with_items: "{{ lxd_container_names }}"
+
+- name: Install Python2 in container
+  delegate_to: "{{item.item}}"
+  raw: apt-get update && apt-get install -y python
+  when: "{{ item.rc==1 }}"
+  with_items: "{{ python_check_is_installed.results }}"

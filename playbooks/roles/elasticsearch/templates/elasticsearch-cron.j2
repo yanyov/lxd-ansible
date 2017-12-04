@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -o nounset
+set -o errexit
+set -o pipefail
+
+# below code depend that we are in ElasticSearch log folder
+cd /var/log/elasticsearch
+
+# this will compare log files which are not yet for delete and the all the log files. The difference will be removed as it will show files older than {{ es_log_files_retention_days }}
+log_files_to_delete=$(comm -13 <(for i in {01..{{ es_log_files_retention_days }}}; do echo {{ es_clustername }}.log.$(date -d "now - ${i}days" "+%Y-%m-%d")*; done | sort) <(ls -1 | grep {{ es_clustername }}.log.20 | sort))
+
+if [ -z $log_files_to_delete ]; then
+	echo "no elasticsearch log files to delete. Exit"
+	exit 0
+fi
+
+echo $log_files_to_delete | xargs rm -v

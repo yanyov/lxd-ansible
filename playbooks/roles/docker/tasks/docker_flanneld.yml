@@ -1,0 +1,18 @@
+- name: Check if there is a flanneld network
+  stat:
+    path: /run/flannel/subnet.env
+  register: docker_flannel
+
+- name: Get flannel subnet
+  shell: grep FLANNEL_SUBNET /run/flannel/subnet.env | awk -F '=' '{print $2}'
+  when: docker_flannel.stat.exists == true
+  changed_when: false
+  register: docker_flannel_subnet
+
+- name: Integrate docker with flanneld
+  lineinfile:
+    dest: /etc/docker/daemon.json
+    regexp: ' "bip":'
+    line: '"bip": "{{ docker_flannel_subnet.stdout }}",'
+  when: docker_flannel.stat.exists == true
+  notify: Run docker

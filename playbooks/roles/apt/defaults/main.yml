@@ -1,0 +1,2 @@
+apt_common_pkgs:
+  - golang

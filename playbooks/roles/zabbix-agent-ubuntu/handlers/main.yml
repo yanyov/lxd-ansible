@@ -1,0 +1,28 @@
+- name: 'Restart zabbix-agent'
+  service:
+    name: zabbix-agent
+    state: restarted
+    enabled: yes
+  when: ansible_distribution_version == '14.04'
+
+- name: 'Restart zabbix-agent-docker'
+  docker_container:
+    name: zabbix-agent
+    image: "{{ zabbix_agent_docker_image }}"
+    state: 'started'
+    restart: yes
+    published_ports:
+      - 10050
+    volumes:
+      - /proc:/coreos/proc
+      - /sys:/coreos/sys
+      - /dev:/coreos/dev
+      - /var/run/docker.sock:/coreos/var/run/docker.sock
+      - /etc/zabbix:/etc/zabbix:ro
+      - /var/log/zabbix-agent:/var/log/zabbix-agent
+      - /usr/bin/iostat:/usr/bin/iostat:ro
+    network_mode: host
+    command:
+      - "{{ ansible_hostname }}"
+      - "{{ zabbix_agent_server }}"
+  when: ansible_distribution_version == '16.04'

@@ -1,0 +1,11 @@
+{
+    "Network": "{{ etcd_flanneld_cidr }}",
+    "SubnetLen": {{ etcd_flanneld_netlen}},
+    "SubnetMin": "{{ etcd_flanneld_subnet_min }}",
+    "SubnetMax": "{{ etcd_flanneld_subnet_max }}",
+    "Backend": {
+        "Type": "{{ etcd_flanneld_protocol }}",
+        "Port": {{ etcd_flanneld_port }}
+    }
+}
+

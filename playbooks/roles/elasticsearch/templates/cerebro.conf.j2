@@ -1,0 +1,12 @@
+# Elasticsearch cerebro plugin
+
+description "Cerebro plugin"
+
+start on runlevel [2345]
+stop on runlevel [06]
+
+script
+  exec start-stop-daemon --start --quiet --exec {{ es_cerebro_dir }}/bin/cerebro
+end script
+
+

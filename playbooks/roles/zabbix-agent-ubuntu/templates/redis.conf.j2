@@ -1,0 +1,5 @@
+#Redis
+UserParameter=redis.discovery,bash -c "{{ zabbix_agent_include_dir }}scripts/redis/redis-status.sh localhost list_key_space_db"
+UserParameter=redis[*],bash -c "{{ zabbix_agent_include_dir }}scripts/redis/redis-status.sh $1 $2 $3"
+UserParameter=redis8379.discovery,bash -c "{{ zabbix_agent_include_dir }}scripts/redis/redis-status8379.sh localhost list_key_space_db"
+UserParameter=redis8379[*],bash -c "{{ zabbix_agent_include_dir }}scripts/redis/redis-status8379.sh $1 $2 $3 $4"

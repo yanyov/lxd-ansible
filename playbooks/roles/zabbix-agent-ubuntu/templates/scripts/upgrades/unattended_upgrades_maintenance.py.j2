@@ -1,0 +1,60 @@
+#!/usr/bin/env python
+import os
+import sys
+from datetime import datetime, timedelta
+import subprocess
+import re
+
+def security_updates_available_count():
+    try:
+        fd = subprocess.Popen("/usr/lib/update-notifier/apt-check",
+                              stdout=subprocess.PIPE,
+                              stderr=subprocess.PIPE)
+        _, err = fd.communicate()
+        not_installed_security_updates = err.split(';')[1]
+        return not_installed_security_updates
+    except subprocess.CalledProcessError:
+        return "1"
+
+def get_date_from_last_upgrade(logdir):
+    dates = []
+    epoch = datetime(1970, 1, 1)
+
+    try:
+        logfiles = os.listdir(logdir)
+    except:
+        return epoch
+
+    # unattended-upgrades-dpkg_2016-01-21_10:10:11.939534.log
+    regex = re.compile("^.*((\d{4})\-(\d+)\-(\d+)\_(\d+)\:(\d+)\:(\d+))")
+
+    for _file in logfiles:
+        match = re.match(regex, _file)
+        if match:
+            res = match.group(1).replace("_", " ")
+            dates.append(datetime.strptime(res, "%Y-%m-%d %H:%M:%S"))
+
+    if not len(dates):
+        return epoch
+
+    dates.sort()
+    return dates[-1]
+
+
+def check_maintenance_required(last_upgrade_date, days):
+    maintenance_window = datetime.now() - timedelta(days=days)
+
+    if last_upgrade_date < maintenance_window:
+        return security_updates_available_count()
+    return "0"
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        sys.exit("Invalid argument count.")
+
+    logdir = "/var/log/unattended-upgrades/"
+    datediff = int(sys.argv[1])
+    last_upgrade = get_date_from_last_upgrade(logdir)
+    is_maintenance_required = check_maintenance_required(last_upgrade, datediff)
+    sys.stdout.write(is_maintenance_required + "\n")
+

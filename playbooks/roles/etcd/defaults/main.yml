@@ -1,0 +1,8 @@
+etcd_dir: "/etc/default"
+etcd_root: "/coreos.com/network/config"  
+etcd_flanneld_cidr: 192.168.0.0/16
+etcd_flanneld_netlen: 24
+etcd_flanneld_subnet_min: 192.168.10.0
+etcd_flanneld_subnet_max: 192.168.99.0
+etcd_flanneld_protocol: udp
+etcd_flanneld_port: 7890

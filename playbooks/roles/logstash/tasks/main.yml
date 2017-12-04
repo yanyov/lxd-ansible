@@ -1,0 +1,27 @@
+- name: Install logstash apt packages from Telerik repo
+  apt:
+    name: logstash={{ logstash_deb_version }}
+    update_cache: yes
+    state: present
+  notify: Restart logstash
+
+- name: Logstash conf file
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items: "{{ logstash_configs }}"
+  notify: Restart logstash
+
+- name: Ensure Logstash is running now and after reboot
+  service:
+    name: logstash
+    state: started
+    enabled: yes
+
+- name: Install logstash-codec-cloudtrail plugin
+  x_logstash_plugin:
+    name: logstash-codec-cloudtrail
+  notify: Restart logstash

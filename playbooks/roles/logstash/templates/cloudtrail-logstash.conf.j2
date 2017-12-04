@@ -1,0 +1,21 @@
+input {
+ s3 {
+  bucket => "{{ logstash_cloudtrail_bucket }}"
+  delete => false
+  interval => {{ logstash_cloudtrail_interval }} 
+  type => "cloudtrail"
+  codec => "cloudtrail"
+  prefix => "{{ logstash_cloudtrail_prefix }}"
+  region => "{{ tap_region }}"
+  sincedb_path => "{{ logstash_cloudtrail_sincedb }}"
+ }
+}
+filter {}
+output {
+ if [type] == "cloudtrail" {
+   elasticsearch { 
+     hosts => {{ logstash_elasticsearch_output | to_json }} 
+     index => "cloudtrail-%{+YYYY.MM.dd}"
+  }
+ }
+}

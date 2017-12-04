@@ -1,0 +1,11 @@
+- name: Restart elasticsearch
+  service:
+    name: elasticsearch
+    state: restarted
+    enabled: yes
+
+- name: Start cerebro plugin
+  service:
+    name: cerebro-plugin
+    state: started
+    enabled: yes

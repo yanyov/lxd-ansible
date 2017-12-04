@@ -1,0 +1,3 @@
+docker_bridge_ip: 172.17.0.1/16
+docker_mtu: 1472
+docker_log_driver: "json-file" 

@@ -1,0 +1,55 @@
+- name: Install sysstat - iostat is in the package
+  apt:
+    name: sysstat
+
+- name: Create needed directoies for zabbix-agent
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: yes
+    mode: 0755
+  with_items:
+    - "{{ zabbix_agent_include_dir }}scripts/iostat"
+    - "{{ zabbix_agent_upgrades_dir }}"
+    - "{{ zabbix_agent_log_dir }}"
+
+- name: Create "{{ zabbix_agent_log_file }}"
+  file:
+    path: "{{ zabbix_agent_log_file }}"
+    state: touch
+    mode: 0666
+
+- name: Create additional configuration files and scripts
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode | default('0644')}}"
+  with_items:
+    - { src: 'zabbix_agentd.conf.j2',
+        dest: "{{ zabbix_agent_etc }}/zabbix_agentd.conf"}
+    - { src: 'iostat.conf.j2',
+        dest: "{{ zabbix_agent_include_dir }}/iostat.conf" }
+    - { src: 'updates.conf.j2',
+        dest: "{{ zabbix_agent_include_dir }}/updates.conf" }
+    - { src: 'system.conf.j2',
+        dest: "{{ zabbix_agent_include_dir }}/system.conf" }
+    - { src: 'scripts/iostat/iostat_collect.sh.j2',
+        dest: "{{ zabbix_agent_include_dir }}/scripts/iostat/iostat_collect.sh",
+        mode: "0755" }
+    - { src: 'scripts/iostat/iostat_parse.sh.j2',
+        dest: "{{ zabbix_agent_include_dir }}/scripts/iostat/iostat_parse.sh",
+        mode: "0755" }
+    - { src: 'scripts/upgrades/unattended_upgrades_maintenance.py.j2',
+        dest: "{{ zabbix_agent_upgrades_dir }}/unattended_upgrades_maintenance.py",
+        mode: "0755" }
+  notify:
+    - Restart zabbix-agent
+    - Restart zabbix-agent-docker
+
+- include: service.yml
+
+- include: ubuntu-14.04.yml
+  when: ansible_distribution_version == '14.04'
+
+- include: ubuntu-16.04.yml
+  when: ansible_distribution_version == '16.04'
