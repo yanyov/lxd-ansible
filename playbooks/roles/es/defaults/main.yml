@@ -1,0 +1,11 @@
+elasticsearch_repo_gpg_key: "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
+elasticsearch_gpg_key_id: "4609 5ACC 8548 582C 1A26 99A9 D27D 666C D88E 42B4"
+elasticsearch_repo: "deb https://artifacts.elastic.co/packages/5.x/apt stable main"
+elasticsearch_repo_filename: "elastic-5.x"
+#this is a list with required pkgs
+elasticsearch_common_pkgs:
+  - apt-transport-https  # this pkg is reuired for apt over https
+#elasticsearch version 5.6.3 required
+elasticsearch_pkg_version: "elasticsearch=5.6.3"
+elasticsearch_cluster_name: "elasticsearch"
+elasticsearch_config_file: "/usr/share/elasticsearch/config/elasticsearch.yml"
