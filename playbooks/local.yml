@@ -1,0 +1,6 @@
+- name: Configure our containers
+  hosts: localhost
+  remote_user: root
+  gather_facts: true
+  roles:
+    - role: mongodb_create_database

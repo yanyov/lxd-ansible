@@ -1,0 +1,47 @@
+- include_role:
+    name: mongodb
+
+- name: Install python-pip
+  apt:
+    name: python-pip
+
+- name: Install pymongo
+  pip:
+    name: pymongo
+
+- name: Get databases created in our mongo
+  shell: mongo --eval="db.adminCommand('listDatabases')"
+  register: mongo
+  changed_when: false
+
+- name: Create databases
+  shell: mongo --eval="db.getSiblingDB('{{ item.db }}').createCollection('empty')"
+  when: 
+    - 'item.db not in mongo.stdout'
+    - 'not "Unauthorized" in mongo.stdout'
+  register: db_create
+  changed_when: db_create | changed
+  with_items: "{{ mongodb_create_dbs }}"
+ 
+- name: Create mongodb root user
+  mongodb_user:
+    database: admin 
+    name: root
+    password: "{{ mongodb_admin_user_pass }}"
+    roles: root 
+    state: present
+  when: 
+    - 'not "Unauthorized" in mongo.stdout'
+
+- name: Create mongodb users
+  mongodb_user: 
+    login_user: root
+    login_password: "{{ mongodb_admin_user_pass }}"
+    database: "{{ item.db }}"
+    name: "{{ item.db_user }}" 
+    password: "{{ item.db_user_pass }}"
+    roles: "{{ item.db_role | default('readWrite') }}"
+    state: present
+  with_items: "{{ mongodb_create_dbs }}"
+  when: 
+    - 'not "Unauthorized" in mongo.stdout'

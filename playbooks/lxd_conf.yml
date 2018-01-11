@@ -8,4 +8,4 @@
       #  - role: common
       #  - role: docker-engine
       #  - role: jenkins
-    - role: mongodb
+    - role: mongodb_create_database
