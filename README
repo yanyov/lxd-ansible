@@ -1,3 +1,4 @@
 #ansible roles, test playbooks - test done in lxd containers(lxd dynamic inventory included)
 #create container using ansible -e (extra-vars)
  ansible-playbook -i inventory/ lxd.yml -e "{lxd_container_names: [c1, c2, c3]}" -vv
+ ansible-playbook -i inventory/ lxd.yml -e "lxd_container_names=rabbitmq" -vv
