@@ -4,3 +4,4 @@ rabbitmq_apt_key: "https://www.rabbitmq.com/rabbitmq-release-signing-key.asc"
 rabbitmq_erlang_pkgs:
   - erlang
   - erlang-nox
+rabbitmq_env: dev

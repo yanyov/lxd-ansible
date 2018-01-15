@@ -7,6 +7,6 @@
   roles:
       #  - role: common
       #  - role: docker-engine
-      #  - role: jenkins
+    - role: jenkins
       #  - role: mongodb_create_database
     - role: rabbitmq

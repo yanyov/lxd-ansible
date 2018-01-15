@@ -1,0 +1,11 @@
+- name: Copy definitions.json
+  copy:
+    src: definitions.{{ rabbitmq_env }}.json
+    dest: /etc/rabbitmq/definitions.json
+  notify: Restart rabbitmq-server
+
+- name: Copy rabbitmq.config file
+  copy:
+    src: rabbitmq.config
+    dest: /etc/rabbitmq/rabbitmq.config
+  notify: Restart rabbitmq-server
