@@ -1,9 +1,10 @@
-- name: Configure our containers
+- name: Configure our localhost
   hosts: localhost
   remote_user: root
   gather_facts: true
   roles:
+    - role: openssl
     # - role: jenkins
-    - role: rabbitmq
-      vars:
-        rabbitmq_install: false
+    #- role: rabbitmq
+    #  vars:
+    #    rabbitmq_install: false

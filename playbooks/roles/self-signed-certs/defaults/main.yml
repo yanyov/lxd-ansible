@@ -1,0 +1,9 @@
+---
+# defaults file for openssl
+openssl_dir: "/usr/share/ca-certs"
+openssl_domain_prefix: domain.local 
+openssl_ca_state: Bulgaria
+openssl_ca_locality: Sofia 
+openssl_ca_organization: "{{ openssl_domain_prefix }}"
+openssl_ca_organizationalunit: IT
+openssl_ca_email: "admin@{{ openssl_domain_prefix }}"

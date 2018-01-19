@@ -1,0 +1,44 @@
+- name: Ensure required packages are installed
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - openssl
+    - python-pip
+
+- name: Install pyOpenSSL python module
+  pip:
+    name: pyOpenSSL
+    state: present
+
+- name: Create configuration directory
+  file:
+    path: "{{ openssl_dir }}"
+    state: directory
+    owner: root
+    group: root
+
+- name: Generate an OpenSSL private key
+  openssl_privatekey:
+    path: "{{ openssl_dir }}/privkey.pem"
+  register: private_key
+
+- name: Generate an OpenSSL CSR
+  openssl_csr:
+    path: "{{ openssl_dir}}/cert-sign-request.csr"
+    privatekey_path: "{{ private_key.filename }}" 
+    email_address: "{{ openssl_ca_email }}"
+    locality_name: "{{ openssl_ca_locality }}" 
+    organization_name: "{{ openssl_ca_organization }}"
+    organizational_unit_name: "{{ openssl_ca_organizationalunit }}" 
+    state_or_province_name: "{{ openssl_ca_state }}"
+    common_name: "{{ ansible_hostname }}"  #gather_facts: true
+    state: present
+  register: csr
+
+- name: Generate a Self Signed OpenSSL certificate
+  openssl_certificate:
+    path: "{{ openssl_dir }}/fullchain.pem"
+    privatekey_path: "{{private_key.filename }}" 
+    csr_path: "{{ csr.filename }}" 
+    provider: selfsigned
