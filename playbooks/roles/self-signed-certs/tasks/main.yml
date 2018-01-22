@@ -20,25 +20,25 @@
 
 - name: Generate an OpenSSL private key
   openssl_privatekey:
-    path: "{{ openssl_dir }}/privkey.pem"
+    path: "{{ openssl_private_key }}"
   register: private_key
 
 - name: Generate an OpenSSL CSR
   openssl_csr:
-    path: "{{ openssl_dir}}/cert-sign-request.csr"
+    path: "{{ openssl_csr }}"
     privatekey_path: "{{ private_key.filename }}" 
-    email_address: "{{ openssl_ca_email }}"
-    locality_name: "{{ openssl_ca_locality }}" 
-    organization_name: "{{ openssl_ca_organization }}"
-    organizational_unit_name: "{{ openssl_ca_organizationalunit }}" 
-    state_or_province_name: "{{ openssl_ca_state }}"
+    email_address: "{{ openssl_email }}"
+    locality_name: "{{ openssl_locality }}" 
+    organization_name: "{{ openssl_organization }}"
+    organizational_unit_name: "{{ openssl_organizationalunit }}" 
+    state_or_province_name: "{{ openssl_state }}"
     common_name: "{{ ansible_hostname }}"  #gather_facts: true
     state: present
   register: csr
 
 - name: Generate a Self Signed OpenSSL certificate
   openssl_certificate:
-    path: "{{ openssl_dir }}/fullchain.pem"
+    path: "{{ openssl_cert }}"
     privatekey_path: "{{private_key.filename }}" 
     csr_path: "{{ csr.filename }}" 
     provider: selfsigned
