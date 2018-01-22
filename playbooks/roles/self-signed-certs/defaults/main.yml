@@ -9,3 +9,4 @@ openssl_organizationalunit: IT
 openssl_email: "admin@{{ openssl_domain_prefix }}"
 openssl_private_key: "{{ openssl_dir }}/privkey.pem"
 openssl_csr: "{{ openssl_dir}}/cert-sign-request.csr"
+openssl_cert: "{{ openssl_dir }}/fullchain.pem"
