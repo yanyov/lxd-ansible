@@ -5,3 +5,12 @@ rabbitmq_erlang_pkgs:
   - erlang
   - erlang-nox
 rabbitmq_env: dev
+rabbitmq_tcp_listeners: 5672
+rabbitmq_ssl_listeners: 5671
+rabbitmq_ca_cert: "/usr/share/ca-certs/fullchain.pem"
+rabbitmq_certfile: "/usr/share/ca-certs/fullchain.pem"
+rabbitmq_keyfile: "/usr/share/ca-certs/privkey.pem"
+rabbitmq_definitions: "/etc/rabbitmq/definitions.json"
+rabbitmq_management_port: 15672
+rabbitmq_ssl_enabled: false
+rabbitmq_config_file: "/etc/rabbitmq/rabbitmq.config"

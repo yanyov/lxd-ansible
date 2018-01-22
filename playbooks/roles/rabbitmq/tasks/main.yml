@@ -1,4 +1,4 @@
-- include_tasks: install_rabbitmq.yml
-  when: 'rabbitmq_install|default(true) == true'
+- import_tasks: install_rabbitmq.yml
+  when: 'rabbitmq_install|default(true)|bool == true'
 
-- include_tasks: configure_rabbitmq.yml
+- import_tasks: configure_rabbitmq.yml

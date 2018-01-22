@@ -1,5 +1,6 @@
 - name: Configure our containers
   hosts: "{{ lxd_container_names }}"
+  #hosts: rabbitmq
 #  - c1
 #  - c2
   remote_user: root
@@ -9,5 +10,4 @@
       #    - role: docker-engine
       #- role: jenkins
       #  - role: mongodb_create_database
-      - role: openssl
       - role: rabbitmq

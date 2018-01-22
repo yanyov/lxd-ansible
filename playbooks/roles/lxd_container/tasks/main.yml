@@ -37,5 +37,5 @@
 - name: Install Python2 in container
   delegate_to: "{{item.item}}"
   raw: apt-get update && apt-get install -y python
-  when: "{{ item.rc==1 }}"
+  when: item.rc==1 
   with_items: "{{ python_check_is_installed.results }}"

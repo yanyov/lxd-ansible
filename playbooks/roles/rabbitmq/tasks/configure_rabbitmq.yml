@@ -1,11 +1,27 @@
+- name: Create self signed certificates
+  import_role:
+    name: self-signed-certs
+  when: rabbitmq_ssl_enabled|bool == true
+
 - name: Copy definitions.json
   copy:
     src: definitions.{{ rabbitmq_env }}.json
-    dest: /etc/rabbitmq/definitions.json
+    dest: "{{ rabbitmq_definitions }}" 
   notify: Restart rabbitmq-server
 
 - name: Copy rabbitmq.config file
-  copy:
-    src: rabbitmq.config
-    dest: /etc/rabbitmq/rabbitmq.config
+  template:
+    src: rabbitmq.config.j2
+    dest: "{{ rabbitmq_config_file }}" 
   notify: Restart rabbitmq-server
+
+- name: Restart RabbitMQ if there is a change in certs
+  service:
+    name: rabbitmq-server
+    state: restarted
+    enabled: true
+  when: >
+    (((csr is defined) and (csr | changed)) or
+    ((private_key is defined) and (private_key | changed)) or 
+    ((selfsigned is defined) and (selfsigned | changed)))
+  # these vars are registered in self-signed-certs role

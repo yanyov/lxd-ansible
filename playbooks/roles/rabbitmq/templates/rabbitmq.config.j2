@@ -1,0 +1,25 @@
+[
+	{ rabbit, [
+		{ loopback_users, [ ] },
+		{ tcp_listeners, [ {{ rabbitmq_tcp_listeners }} ] },
+        {% if rabbitmq_ssl_enabled %}
+        {ssl_listeners, [{{ rabbitmq_ssl_listeners }}]},
+        {ssl_options, [{cacertfile,"{{ rabbitmq_ca_cert }}"},
+                      {certfile,"{{ rabbitmq_ca_cert }}"},
+                      {keyfile,"{{ rabbitmq_keyfile }}"},
+                      {verify,verify_peer},
+                      {fail_if_no_peer_cert,false}
+                      ]},
+        {% else %}
+        { ssl_listeners, [ ] },
+        {% endif %}
+		{ hipe_compile, false }
+	] },
+	{ rabbitmq_management, [ 
+       	{ load_definitions, "{{ rabbitmq_definitions }}"},
+		{ listener, [
+			{ port, {{ rabbitmq_management_port }} },
+			{ ssl, false }
+			] }
+	] }
+].
