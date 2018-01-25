@@ -10,4 +10,7 @@
       #    - role: docker-engine
       #- role: jenkins
       #  - role: mongodb_create_database
-      - role: rabbitmq
+      - role: self-signed-certs
+        #- role: es
+        #vars:
+        #  elasticsearch_xpack: true  

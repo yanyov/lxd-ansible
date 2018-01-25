@@ -4,9 +4,11 @@ elasticsearch_repo: "deb https://artifacts.elastic.co/packages/5.x/apt stable ma
 elasticsearch_repo_filename: "elastic-5.x"
 #this is a list with required pkgs
 elasticsearch_common_pkgs:
-  - apt-transport-https  # this pkg is reuired for apt over https
+  - apt-transport-https 
   - openjdk-8-jre
 #elasticsearch version 5.6.3 required
 elasticsearch_pkg_version: "elasticsearch=5.6.3"
 elasticsearch_cluster_name: "elasticsearch"
 elasticsearch_config_file: "/etc/elasticsearch/elasticsearch.yml"
+elasticsearch_xpack: false
+elasticsearch_plugin_bin: "/usr/share/elasticsearch/bin/elasticsearch-plugin"
