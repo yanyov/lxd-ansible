@@ -3,7 +3,8 @@
   remote_user: root
   gather_facts: true
   roles:
-    - role: self-signed-certs 
+    - role: authorized_keys
+      #- role: self-signed-certs 
     # - role: jenkins
     #- role: rabbitmq
     #  vars:
