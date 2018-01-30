@@ -10,11 +10,6 @@
     state: present
     filename: "{{ elasticsearch_repo_filename }}"
 
-- name: Run "apt-get update"
-  apt:
-    update_cache: yes
-    cache_valid_time: 3600
-
 - name: Install Elasticsearch common packages
   apt:
     name: "{{ item }}"

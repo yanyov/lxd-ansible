@@ -12,3 +12,6 @@ elasticsearch_cluster_name: "elasticsearch"
 elasticsearch_config_file: "/etc/elasticsearch/elasticsearch.yml"
 elasticsearch_xpack: false
 elasticsearch_plugin_bin: "/usr/share/elasticsearch/bin/elasticsearch-plugin"
+elasticsearch_xpack_license_url: "http://localhost:9200/_xpack/license"
+elasticsearch_user: "elastic"
+elasticsearch_pass: "changeme"

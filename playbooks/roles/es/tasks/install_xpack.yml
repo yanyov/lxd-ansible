@@ -1,8 +1,0 @@
-- name: Install xpack plugin
-  elasticsearch_plugin:
-    name: x-pack
-    plugin_bin: "{{ elasticsearch_plugin_bin }}"
-    state: present
-  notify: Restart Elasticsearch
-
-

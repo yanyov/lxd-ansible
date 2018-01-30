@@ -1,0 +1,62 @@
+- name: Install xpack plugin
+  elasticsearch_plugin:
+    name: x-pack
+    plugin_bin: "{{ elasticsearch_plugin_bin }}"
+    state: present
+  register: xpack_install
+  notify: Restart Elasticsearch
+
+- name: Restart Elasticsearch if xpack was installed
+  service:
+    name: elasticsearch
+    state: restarted
+    enabled: yes
+  when: 'xpack_install | changed'
+  register: restart_elasticsearch
+
+- name: Need time for xpack to be enabled 
+  wait_for:
+    port: 9200
+    state: started
+    delay: 15 
+    timeout: 90
+  when: 'xpack_install | changed'
+
+- name: Check if x-pack has license
+  uri:
+    method: GET
+    url: "{{ elasticsearch_xpack_license_url }}"
+    user: "{{ elasticsearch_user }}"
+    password: "{{ elasticsearch_pass }}"
+    return_content: yes
+  register: elasticsearch_license_activated
+
+- name: Print current license
+  debug:
+    var: elasticsearch_license_activated
+
+- name: Activate Xpack license
+  uri:
+    method: PUT
+    url: "{{ elasticsearch_xpack_license_url }}?acknowledge=true"
+    user: "{{ elasticsearch_user }}"
+    password: "{{ elasticsearch_pass }}"
+    force_basic_auth: yes
+    body_format: json
+    body: "{{ lookup('file','xpack.json') }}"
+    return_content: yes
+  register: xpack_activated 
+  #  changed_when: "xpack_activated.status == 200"
+  changed_when: "xpack_activated.json.acknowledged == true"
+  when: >
+    elasticsearch_license_activated.json.license.status != 'valid' and 
+    elasticsearch_license_activated.json.license.type == 'trial'
+
+- name: Check new license
+  uri:
+    method: GET
+    url: "{{ elasticsearch_xpack_license_url }}"
+    user: "{{ elasticsearch_user }}"
+    password: "{{ elasticsearch_pass }}"
+    return_content: yes
+  register: elasticsearch_license_activated
