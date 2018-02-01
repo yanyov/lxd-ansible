@@ -1,0 +1,18 @@
+pipeline {
+  agent{
+    label 'master'
+  }
+
+  parameters {
+    // choices are newline separated
+    choice(choices: 'dev\nsit', description: 'What environment?', name: 'environment')
+  }
+
+  stages {
+    stage('Deploy definitions file'){
+      steps {
+        sh 'ansible-playbook -i /dev/null /vagrant/lxd-ansible/local.yml -e "rabbitmq_install=false rabbitmq_env=${environment}" -vv'
+      }
+    }
+  }     
+}

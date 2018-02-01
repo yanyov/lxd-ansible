@@ -1,0 +1,4 @@
+- import_tasks: install_rabbitmq.yml
+  when: 'rabbitmq_install|default(true)|bool == true'
+
+- import_tasks: configure_rabbitmq.yml

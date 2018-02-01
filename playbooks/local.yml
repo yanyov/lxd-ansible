@@ -3,9 +3,9 @@
   remote_user: root
   gather_facts: true
   roles:
-    - role: authorized_keys
+      #- role: authorized_keys
       #- role: self-signed-certs 
-    # - role: jenkins
+    - role: jenkins
     #- role: rabbitmq
     #  vars:
     #    rabbitmq_install: false

@@ -1,0 +1,38 @@
+- name: Install erlang-solution
+  apt:
+    deb: "{{ rabbitmq_erlang_solutions }}" 
+
+- name: Add rabbitmq apt repository key
+  apt_key:
+    url: "{{ rabbitmq_apt_key }}" 
+    state: present
+
+- name: Add rabbitmq repository and run "apt update"
+  apt_repository:
+    repo: "{{ rabbitmq_repo }}"
+    state: present
+    update_cache: true
+   
+- name: Install erlang 
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ rabbitmq_erlang_pkgs }}"
+
+- name: Install rabbitmq-server
+  apt:
+    name: rabbitmq-server
+    state: present
+  notify: Restart rabbitmq-server
+
+- name: Enable rabbitmq_management plugin
+  shell: rabbitmq-plugins enable rabbitmq_management
+  register: rabbitmq_management
+  changed_when: 'rabbitmq_management.rc == 0 and
+    not "Plugin configuration unchanged." in rabbitmq_management.stdout'
+
+- name: Start rabbitmq-server
+  service:
+    name: rabbitmq-server 
+    state: started
+    enabled: true
