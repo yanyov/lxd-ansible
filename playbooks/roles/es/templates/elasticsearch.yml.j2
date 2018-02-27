@@ -1,7 +1,23 @@
 cluster.name: "{{ elasticsearch_cluster_name }}"
-
 network.host: 0.0.0.0
 
+{% if elasticsearch_cluster is not defined %}
 discovery.zen.minimum_master_nodes: 1
-
 discovery.type: single-node
+{% endif %}
+
+{% if elasticsearch_cluster is defined %}
+discovery.zen.minimum_master_nodes: 2
+node.name: ${HOSTNAME}
+discovery.zen.ping.unicast.hosts: {{ elasticsearch_cluster | to_json }}
+{% endif %}
+
+{% if elasticsearch_xpack %}
+xpack.security.enabled: true
+xpack.ssl.key: {{ elasticsearch_ssl_dir }}/{{ elasticsearch_ssl_private_key.split('/')[-1] }}
+xpack.ssl.certificate: {{ elasticsearch_ssl_dir }}/{{ elasticsearch_ssl_cert.split('/')[-1] }} 
+xpack.ssl.certificate_authorities: ["{{ elasticsearch_ssl_dir }}/{{ elasticsearch_ssl_ca }}"]
+xpack.security.transport.ssl.enabled: true
+xpack.security.http.ssl.enabled: true
+xpack.ssl.verification_mode: certificate
+{% endif %}

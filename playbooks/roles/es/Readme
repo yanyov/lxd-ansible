@@ -1,0 +1,18 @@
+Ansible role that will install elasticsearch.
+To change the verion of elasticsearch change variable elasticsearch_pkg_version.
+In our role default/main.yml we use version 5.6.3:
+elasticsearch_pkg_version: "elasticsearch=5.6.3"
+
+To install xpack you need to set:
+elasticsearch_xpack: true (by default is false)
+You also need to have separate certs for every elasticsearch server. The certs are located in - files/certs/(dev/sit - or any other environment).
+For certs use following varibles:
+- elasticsearch_ssl_private_key
+- elasticsearch_ssl_cert
+- elasticsearch_ssl_ca
+
+To create cluster use:
+- role: es
+  vars:
+    elasticsearch_cluster: ["es1", "es2", "es3"]
+where es1, es2, es3 are our elasticsearch nodes.

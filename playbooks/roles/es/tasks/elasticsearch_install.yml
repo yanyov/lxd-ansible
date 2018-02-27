@@ -1,3 +1,9 @@
+- name: Set vm.max_map_count to 262144
+  sysctl:
+    name: vm.max_map_count
+    value: 262144
+    reload: yes
+
 - name: Import Elasticsearch repo GPG key
   apt_key:
     url: "{{ elasticsearch_repo_gpg_key }}"

@@ -6,15 +6,16 @@
   remote_user: root
   gather_facts: true
   roles:
-      - role: rabbitmq-aim
-        vars:
-          rabbitmq_ssl_enabled: false
+      #      - role: rabbitmq-aim
+      #        vars:
+      #          rabbitmq_ssl_enabled: false
 
       #    - role: common
       #    - role: docker-engine
       #- role: jenkins
       #  - role: mongodb_create_database
       #- role: self-signed-certs
-      #- role: es
-      #  vars:
-      #    elasticsearch_xpack: true  
+    - role: es
+      vars:
+          #  elasticsearch_xpack: true  
+          elasticsearch_cluster: ["es1", "es2", "es3"]
