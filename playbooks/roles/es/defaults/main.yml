@@ -8,7 +8,7 @@ elasticsearch_common_pkgs:
   - openjdk-8-jre
 #elasticsearch version 5.6.3 required
 elasticsearch_pkg_version: "elasticsearch=5.6.3"
-elasticsearch_cluster_name: "elasticsearch"
+elasticsearch_cluster_name: "elasticsearch-{{ elasticsearch_env }}"
 elasticsearch_config_file: "/etc/elasticsearch/elasticsearch.yml"
 elasticsearch_xpack: false
 elasticsearch_plugin_bin: "/usr/share/elasticsearch/bin/elasticsearch-plugin"
@@ -17,6 +17,6 @@ elasticsearch_user: "elastic"
 elasticsearch_pass: "changeme"
 elasticsearch_env: "dev"
 elasticsearch_ssl_dir: "/etc/elasticsearch/ssl"
-elasticsearch_ssl_private_key: "certs/{{ elasticsearch_env }}/{{ ansible_hostname }}.{{ elasticsearch_env }}.private.key"
-elasticsearch_ssl_cert: "certs/{{ elasticsearch_env }}/{{ ansible_hostname }}.{{ elasticsearch_env }}.xformdevpoc.com.cer"
+elasticsearch_ssl_private_key: "certs/{{ elasticsearch_env }}/elasticsearch.{{ elasticsearch_env }}.xformdevpoc.com.key"
+elasticsearch_ssl_cert: "certs/{{ elasticsearch_env }}/elasticsearch.{{ elasticsearch_env }}.xformdevpoc.com.crt"
 elasticsearch_ssl_ca: "aimca.crt"
