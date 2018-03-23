@@ -22,6 +22,16 @@ systemLog:
 net:
   port: "{{ mongodb_port }}"
   bindIp: "{{ mongodb_bind_ip }}" 
+#  bindIpAll: true
+{% if mongodb_pem is defined %}
+  ssl:
+    mode: requireSSL
+    disabledProtocols: TLS1_2
+    PEMKeyFile: "{{ mongodb_pem }}"
+{% if mongodb_CA is defined %}
+    CAFile: "{{ mongodb_CA }}"
+{% endif %}
+{% endif%}
 
 
 # how the process runs

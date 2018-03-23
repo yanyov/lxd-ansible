@@ -42,3 +42,14 @@
     privatekey_path: "{{private_key.filename }}" 
     csr_path: "{{ csr.filename }}" 
     provider: selfsigned
+  register: cert
+
+- name: Check for file with combined private key and certificate
+  stat:
+    path: "{{ openssl_private_key_and_cert }}"
+  register: st
+  changed_when: false
+
+- name: Concatenate private key and certificate
+  shell: cat "{{ openssl_private_key }}" "{{ openssl_cert }}" > "{{ openssl_private_key_and_cert }}"
+  when: "( private_key | changed ) or ( cert | changed ) or ( st.stat.exists == false )"

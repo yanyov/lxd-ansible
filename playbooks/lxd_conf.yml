@@ -15,7 +15,12 @@
       #- role: jenkins
       #  - role: mongodb_create_database
       #- role: self-signed-certs
-    - role: es
+      #    - role: es
+      #      vars:
+      #        elasticsearch_xpack: true  
+      #        elasticsearch_cluster: ["elasticsearch1.dev.xformdevpoc.com", "elasticsearch2.dev.xformdevpoc.com", "elasticsearch3.dev.xformdevpoc.com"]
+    - role: self-signed-certs
+    - role: mongodb
       vars:
-        elasticsearch_xpack: true  
-        elasticsearch_cluster: ["elasticsearch1.dev.xformdevpoc.com", "elasticsearch2.dev.xformdevpoc.com", "elasticsearch3.dev.xformdevpoc.com"]
+        mongodb_pem: /usr/share/ca-certs/certs.pem
+        mongodb_CA: /usr/share/ca-certs/fullchain.pem

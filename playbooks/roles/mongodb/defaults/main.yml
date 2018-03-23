@@ -7,4 +7,4 @@ mongodb_conf: "/etc/mongod.conf"
 mongodb_db_path: "/var/lib/mongodb"
 mongodb_system_log: "/var/log/mongodb/mongod.log"
 mongodb_port: 27017
-mongodb_bind_ip: 127.0.0.1
+mongodb_bind_ip: 0.0.0.0

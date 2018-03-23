@@ -1,1 +1,2 @@
 playbooks/roles/es/files
+*.retry
