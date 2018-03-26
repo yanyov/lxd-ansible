@@ -1,0 +1,53 @@
+# mongod.conf
+
+# for documentation of all options, see:
+#   http://docs.mongodb.org/manual/reference/configuration-options/
+
+# Where and how to store data.
+storage:
+  dbPath: "{{ mongodb_db_path }}" 
+  journal:
+    enabled: true
+#  engine:
+#  mmapv1:
+#  wiredTiger:
+
+# where to write logging data.
+systemLog:
+  destination: file
+  logAppend: true
+  path: "{{ mongodb_system_log }}" 
+
+# network interfaces
+net:
+  port: "{{ mongodb_port }}"
+  bindIp: "{{ mongodb_bind_ip }}" 
+#  bindIpAll: true
+{% if mongodb_pem | bool == true %}
+  ssl:
+    mode: requireSSL
+    disabledProtocols: TLS1_2
+    PEMKeyFile: "{{ mongodb_cert_folder }}/{{ mongodb_crt }}"
+{% if mongodb_CA | bool == true %}
+    CAFile: "{{ mongodb_cert_folder }}/{{ mongodb_CA_crt }}"
+{% endif %}
+{% endif%}
+
+
+# how the process runs
+processManagement:
+  timeZoneInfo: /usr/share/zoneinfo
+
+#security:
+
+#operationProfiling:
+
+#replication:
+
+#sharding:
+
+## Enterprise-Only Options:
+
+#auditLog:
+
+#snmp:

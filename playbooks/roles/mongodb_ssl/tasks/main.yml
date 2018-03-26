@@ -1,0 +1,48 @@
+- name: Import mongodb GPG key
+  apt_key:
+    keyserver: "{{ mongodb_keyserver }}"
+    id: "{{ mongodb_key_id }}"
+    state: present
+    
+- name: Mongodb certificates
+  block:
+  - file:
+      path: "{{ mongodb_cert_folder }}"
+      state: directory
+      owner: root
+      group: root
+  - copy:
+      src: "{{ item }}"
+      dest: "{{ mongodb_cert_folder }}/{{ item.split('/')[-1]  }}"
+    with_items: 
+    - "{{ mongodb_env }}/{{ mongodb_crt }}"
+    - "{{ mongodb_CA_crt }}"
+  when: "(mongodb_pem | bool == true) and (mongodb_CA | bool == true)"
+
+- name: Add mongodb repository and run "apt-get update"
+  apt_repository:
+    repo: "{{ mongodb_repo }}"
+    filename: "{{ mongodb_repo_file }}"
+    state: present
+    update_cache: true
+
+- name: Install "{{ mongodb_package }}"
+  apt:
+    name: "{{ mongodb_package }}"
+    state: present
+  notify: Restart mongod
+
+- name: Copy mongodb configuration file to "{{ mongodb_conf }}"
+  template:
+    src: mongod.conf.j2
+    dest: "{{ mongodb_conf }}"
+    mode: 0644
+    owner: root
+    group: root
+  notify: Restart mongod
+
+- name: Start mongod
+  service:
+    name: mongod
+    state: started
+    enabled: true
