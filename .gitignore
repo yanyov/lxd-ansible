@@ -1,3 +1,3 @@
 playbooks/roles/es/files
-playbooks/roles/mongodb_ssl/files
+playbooks/roles/mongodb_ssl/files/*
 *.retry
