@@ -1,0 +1,8 @@
+---
+# defaults file for consul
+consul_archive: https://releases.hashicorp.com/consul/1.0.6/consul_1.0.6_linux_amd64.zip?_ga=2.150025654.1693525233.1522660330-596032387.1522660330
+consul_dest: /usr/local/bin
+consul_config_dir: /etc/consul.d
+consul_pers_storage: /var/consul
+consul_dc: dc1
+consul_keygen: fLBvNHLswz9DLsSogVdpGw==

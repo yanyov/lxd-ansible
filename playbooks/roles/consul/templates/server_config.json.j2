@@ -1,0 +1,11 @@
+{
+    "bootstrap": false,
+    "server": true,
+    "datacenter": "{{ consul_dc }}",
+    "data_dir": "{{ consul_pers_storage }}",
+    "encrypt": "{{ consul_keygen }}",
+    "log_level": "INFO",
+    "enable_syslog": true,
+    "start_join": {{ ansible_play_hosts|to_json }} 
+}
+

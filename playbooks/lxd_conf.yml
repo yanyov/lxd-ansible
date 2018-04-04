@@ -20,7 +20,8 @@
       #        elasticsearch_xpack: true  
       #        elasticsearch_cluster: ["elasticsearch1.dev.xformdevpoc.com", "elasticsearch2.dev.xformdevpoc.com", "elasticsearch3.dev.xformdevpoc.com"]
       #    - role: self-signed-certs
-    - role: mongodb2
-      vars:
-        mongodb_pem: true
-        mongodb_CA: true
+      #    - role: mongodb2
+      #      vars:
+      #        mongodb_pem: true
+      #        mongodb_CA: true
+    - role: consul
