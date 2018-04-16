@@ -52,4 +52,4 @@
 
 - name: Concatenate private key and certificate
   shell: cat "{{ openssl_private_key }}" "{{ openssl_cert }}" > "{{ openssl_private_key_and_cert }}"
-  when: "( private_key | changed ) or ( cert | changed ) or ( st.stat.exists == false )"
+  when: "( private_key is changed ) or ( cert is changed ) or ( st.stat.exists == false )"

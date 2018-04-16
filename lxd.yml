@@ -1,2 +1,2 @@
-- include: playbooks/lxd_boot.yml
-- include: playbooks/lxd_conf.yml
+- import_playbook: playbooks/lxd_boot.yml
+- import_playbook: playbooks/lxd_conf.yml

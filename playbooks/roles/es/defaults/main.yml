@@ -20,3 +20,8 @@ elasticsearch_ssl_dir: "/etc/elasticsearch/ssl"
 elasticsearch_ssl_private_key: "certs/{{ elasticsearch_env }}/elasticsearch.{{ elasticsearch_env }}.xformdevpoc.com.key"
 elasticsearch_ssl_cert: "certs/{{ elasticsearch_env }}/elasticsearch.{{ elasticsearch_env }}.xformdevpoc.com.crt"
 elasticsearch_ssl_ca: "aimca.crt"
+# this should be in vault
+elasticsearch_xpack_users:
+  - { name: kibana, password: some_new_pass1 }
+  - { name: logstash_system, password: some_new_pass2 }
+  - { name: elastic, password: some_new_pass3 }

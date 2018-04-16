@@ -27,8 +27,8 @@
 - name: Install CA
   shell: update-ca-certificates
   register: install_ca
-  changed_when: 'install_ca | succeeded'
-  when: 'cert | changed '
+  changed_when: 'install_ca is succeeded'
+  when: 'cert is changed '
 
 - name: Install xpack plugin
   elasticsearch_plugin:
@@ -43,13 +43,13 @@
     name: elasticsearch
     state: restarted
     enabled: yes
-  when: 'xpack_install | changed'
+  when: 'xpack_install is changed'
   register: restart_elasticsearch
 
 - name: Need time for xpack to be enabled 
   wait_for:
-    timeout: 20 
-  when: 'xpack_install | changed'
+    timeout: 120 
+  when: 'xpack_install is changed'
 
 - name: Check if x-pack has license
   uri:
