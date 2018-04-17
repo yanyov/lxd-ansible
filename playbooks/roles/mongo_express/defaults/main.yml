@@ -1,0 +1,12 @@
+mongo_express_keyserver: "https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
+mongo_express_node_repo: "deb https://deb.nodesource.com/node_9.x xenial main"
+mongo_express_repo_file: nodesource.list
+mongo_express_conf: /usr/lib/node_modules/mongo-express/config.js
+mongo_express_app: /usr/lib/node_modules/mongo-express/app.js
+mongo_express_user: admin
+mongo_express_pass: pass
+mongo_express_port: 8081
+mongo_express_host: "0.0.0.0"
+mongo_express_db_server: localhost
+mongo_express_db_port: 27017
+mongo_express_db_user: admin

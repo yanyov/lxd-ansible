@@ -1,0 +1,32 @@
+- name: Create a container
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tags: [boot, clean]
+  roles:
+  - role: lxd_container
+    lxd_container_names:
+    - mongodb
+    - express
+    lxd_profile:
+    - default
+    - docker
+    lxd_container_conf:
+    - security.privileged: "true"
+    - security.nesting: "true"
+    - linux.kernel_modules: "ip_tables, ip6_tables, netlink_diag, nf_nat, overlay"
+
+- name: Configure our mongo container
+  hosts: mongodb 
+  remote_user: root
+  gather_facts: true
+  roles:
+  - role: mongodb_create_database
+
+- name: Configure our express container
+  hosts: express
+  remote_user: root
+  gather_facts: true
+  roles:
+  - role: mongo_express
+    mongo_express_db_server: mongodb

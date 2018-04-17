@@ -1,0 +1,45 @@
+- import_role:
+    name: mongodb_create_database
+
+- include_vars:
+    file: ../../mongodb_create_database/defaults/main.yml
+
+- name: Import nodejs GPG key
+  apt_key:
+    url: "{{ mongo_express_keyserver }}"
+    state: present
+
+- name: Add node.js repository
+  apt_repository:
+    repo: "{{ mongo_express_node_repo }}"
+    filename: "{{ mongo_express_repo_file }}"
+    state: present
+    update_cache: true
+
+- name: Install node.js
+  apt:
+    name: nodejs
+    state: present
+
+- name: Install mongo-express
+  npm:
+    name: "{{ item }}"
+    state: present
+    global: yes
+  with_items:
+    - forever
+    - mongo-express
+
+- name: Configure mongo-express
+  template:
+    src: config.default.j2
+    dest: "{{ mongo_express_conf }}"
+
+- name: Start mongo-express
+  command: forever list
+  register: forever_list
+  changed_when: false
+
+- name: Start mongo-express if it's not running
+  command: "forever start {{ mongo_express_app }}" 
+  when: "forever_list.stdout.find('/path/to/app.js') == -1"
