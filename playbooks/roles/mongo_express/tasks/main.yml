@@ -1,6 +1,4 @@
-- import_role:
-    name: mongodb_create_database
-
+#Need var mongodb_create_dbs for our config.js
 - include_vars:
     file: ../../mongodb_create_database/defaults/main.yml
 
