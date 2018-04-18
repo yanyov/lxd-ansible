@@ -42,6 +42,8 @@
     password: "{{ item.db_user_pass }}"
     roles: "{{ item.db_role | default('readWrite') }}"
     state: present
-  with_items: "{{ mongodb_create_dbs }}"
+  with_items: 
+    - "{{ mongodb_create_dbs }}"
+    - "{{ mongo_express }}"
   when: 
     - 'not "Unauthorized" in mongo.stdout'

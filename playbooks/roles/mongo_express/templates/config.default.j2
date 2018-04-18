@@ -60,12 +60,23 @@ port: {{ mongo_express_db_port }},
        *
        */
     {% for item in mongodb_create_dbs %}
+     {
+        database: '{{ item.db }}',
+        {% for item in mongo_express %}
+        username: '{{ item.db_user }}',
+        password: '{{ item.db_user_pass }}'
+        {% endfor %}
+      },
+    {% endfor %}
+{#
+    {% for item in mongo_express %}
       {
         database: '{{ item.db }}',
         username: '{{ item.db_user }}',
         password: '{{ item.db_user_pass }}'
       },
     {% endfor %}
+#}
     ],
 
     //  >>>>  If you are using an admin mongodb account, or no admin account exists, fill out section below
