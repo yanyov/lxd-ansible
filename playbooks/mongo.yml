@@ -21,7 +21,7 @@
   remote_user: root
   gather_facts: true
   roles:
-  - role: mongodb_create_database
+  - role: mongodb_x509
 
 - name: Configure our express container
   hosts: express

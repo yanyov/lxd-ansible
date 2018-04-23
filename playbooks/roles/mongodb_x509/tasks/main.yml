@@ -1,0 +1,31 @@
+- include_role:
+    name: mongodb_create_database
+
+- name: Mongodb certificates
+  block:
+  - file:
+      path: "{{ mongodb_cert_folder }}"
+      state: directory
+      owner: root
+      group: root
+  - copy:
+      src: "{{ item }}"
+      dest: "{{ mongodb_cert_folder }}/{{ item }}"
+    with_items:
+    - "{{ mongodb_crt }}"
+    - "{{ mongodb_CA_crt }}"
+
+- name: Copy mongodb configuration file to "{{ mongodb_conf }}"
+  template:
+    src: mongod.conf.j2
+    dest: "{{ mongodb_conf }}"
+    mode: 0644
+    owner: root
+    group: root
+  notify: Restart mongod
+
+- name: Start mongod
+  service:
+    name: mongod
+    state: restarted
+    enabled: true

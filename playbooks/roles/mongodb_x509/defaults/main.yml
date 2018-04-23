@@ -1,0 +1,13 @@
+mongodb_keyserver: "hkp://keyserver.ubuntu.com:80"
+mongodb_key_id: "2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5"
+mongodb_repo: "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse"
+mongodb_repo_file: "mongodb-org"
+mongodb_package: "mongodb-org"
+mongodb_conf: "/etc/mongod.conf"
+mongodb_db_path: "/var/lib/mongodb"
+mongodb_system_log: "/var/log/mongodb/mongod.log"
+mongodb_port: 27017
+mongodb_bind_ip: 0.0.0.0
+mongodb_cert_folder: "/usr/share/ca-certs"
+mongodb_crt: "mongodb.pem"
+mongodb_CA_crt: "root-ca.pem"
