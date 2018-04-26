@@ -1,0 +1,24 @@
+- name: Create a container
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tags: [boot, clean]
+  roles:
+  - role: lxd_container
+    lxd_container_names: elastic
+    lxd_profile:
+    - default
+    - docker
+    lxd_container_conf:
+    - security.privileged: "true"
+    - security.nesting: "true"
+    - linux.kernel_modules: "ip_tables, ip6_tables, netlink_diag, nf_nat, overlay"
+
+- name: Configure our elasticsearch container
+  hosts: elastic
+  remote_user: root
+  gather_facts: true
+  roles:
+  - role: es
+    elasticsearch_xpack: true
+  - role: elasticsearch_xpack_users

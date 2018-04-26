@@ -24,4 +24,14 @@ elasticsearch_ssl_ca: "aimca.crt"
 elasticsearch_xpack_users:
   - { name: kibana, password: some_new_pass1 }
   - { name: logstash_system, password: some_new_pass2 }
-  - { name: elastic, password: some_new_pass3 }
+  - { name: elastic, password: "{{ elasticsearch_elastic_pass }}" }
+
+elasticsearch_elastic_pass: some_new_pass3
+
+elasticsearch_new_users:
+  - { name: mgm_serv, password: koCood0e } 
+  - { name: qa_read, password: Esh7xal9 }
+  - { name: etl_read, password: quoo6Aqu }
+  - { name: etl_loader, password: Pe5uighi }
+  - { name: dbd_read, password: esho4Oor }
+  - { name: deployment, password: Ti2aen4K }

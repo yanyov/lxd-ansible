@@ -1,0 +1,17 @@
+elasticsearch_default_user: "elastic"
+elasticsearch_default_pass: "changeme"
+
+elasticsearch_xpack_users:
+  - { name: kibana, password: some_new_pass1 }
+  - { name: logstash_system, password: some_new_pass2 }
+  - { name: elastic, password: "{{ elasticsearch_elastic_pass }}" }
+
+elasticsearch_elastic_pass: some_new_pass3
+
+elasticsearch_new_users:
+  - { name: mgm_serv, password: koCood0e, roles: "read, write" }
+  - { name: qa_read, password: Esh7xal9, roles: "read, write" }
+  - { name: etl_read, password: quoo6Aqu, roles: "read, write" }
+  - { name: etl_loader, password: Pe5uighi, roles: "read, write" }
+  - { name: dbd_read, password: esho4Oor, roles: "read, write" }
+  - { name: deployment, password: Ti2aen4K, roles: "read, write" }

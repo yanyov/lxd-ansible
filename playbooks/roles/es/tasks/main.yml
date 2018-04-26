@@ -1,5 +1,3 @@
 - import_tasks: elasticsearch_install.yml
 - import_tasks: xpack_install.yml
   when: 'elasticsearch_xpack | bool == true'
-- import_tasks: xpack_users.yml
-  when: 'elasticsearch_xpack | bool == true'
