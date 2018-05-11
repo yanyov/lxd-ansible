@@ -16,7 +16,10 @@
   apt_repository: 
     repo: "{{ jenkins_repo }}"
 
-- name: Update apt with new Jenkins repo and install Jenkins
+- name: Install java
   apt:
-    name: jenkins
-    update_cache: yes
+    name: openjdk-8-jre
+
+- name: Install jenkins
+  apt:
+    name: jenkins 
